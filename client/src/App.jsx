@@ -24,9 +24,8 @@ function App() {
 
   },[window.ethereum.accounts])
 
+
   
-
-
 
   return (
     <Navbar></Navbar>

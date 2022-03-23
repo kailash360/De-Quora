@@ -1,5 +1,5 @@
 const Constants = {
-    RPC_PROVIDER: 'https://localhost:7545',
+    RPC_PROVIDER: 'http://localhost:7545',
 }
 
 export default Constants

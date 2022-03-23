@@ -9,10 +9,11 @@ const GetContracts = async() => {
     const web3 = new Web3(Constants.RPC_PROVIDER)
 
     const NETWORK_ID = await web3.eth.net.getId()
+    const CONTRACT_ADDRESS = MAIN_CONTRACT_BUILD.networks[NETWORK_ID].address
 
-    const MainContract = new web3.eth.Contract(MAIN_CONTRACT_BUILD.abi, MAIN_CONTRACT_BUILD.networks[NETWORK_ID].address)
-    const UserContract = new web3.eth.Contract(USER_CONTRACT_BUILD.abi, USER_CONTRACT_BUILD.networks[NETWORK_ID].address)
-    const QuestionContract = new web3.eth.Contract(QUESTION_CONTRACT_BUILD.abi, QUESTION_CONTRACT_BUILD.networks[NETWORK_ID].address)
+    const MainContract = new web3.eth.Contract(MAIN_CONTRACT_BUILD.abi, CONTRACT_ADDRESS)
+    const UserContract = new web3.eth.Contract(USER_CONTRACT_BUILD.abi, CONTRACT_ADDRESS)
+    const QuestionContract = new web3.eth.Contract(QUESTION_CONTRACT_BUILD.abi, CONTRACT_ADDRESS)
 
     return { success: true, data: { MainContract, UserContract, QuestionContract } }
 }
