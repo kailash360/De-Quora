@@ -7,9 +7,16 @@ contract User{
     string public name;
     Question[] public my_questions;
     Question.Answer[] public my_answers;
-    
+
+    event user_created(string, address);
+
     constructor(string memory _name){
         name = _name;
+        emit user_created(_name, address(this));
+    }
+
+    function get_user_details() public view returns(string memory){
+        return name;
     }
 
     function add_question(string memory _question) public returns(Question){

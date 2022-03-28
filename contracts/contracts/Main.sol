@@ -4,25 +4,28 @@ import "./User.sol";
 
 contract Main {
 
-    uint public total_users;
-    mapping(uint => User) public users;
-    // Question[] public all_questions;
-    
+    mapping(address => User) public users;    
 
-    constructor() {
-        total_users = 0;
-        // all_questions = [];
+    event new_user_added(string, address);
+    event main_deployed(string);
+
+    constructor(){
+        emit main_deployed('Main is deployed');
     }
 
-    function register(string memory _name) public returns(User){
+
+    function register(string memory _name) public payable returns(User){
+
         require(bytes(_name).length != 0,"Name cannot be empty");
 
         //Create a new user
         User newUser = new User(_name);
-        users[total_users] = newUser;
-        total_users++;
+        users[msg.sender] = newUser;
 
+        emit new_user_added(_name, address(newUser));
+        
         //Return the user
         return newUser;
     }
+
 }
