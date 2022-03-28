@@ -6,7 +6,8 @@ function AuthContextProvider(props){
 
     const [state,setState] = useState({
         authenticated: false,
-        account: ''
+        account: '',
+        userAddress: ''
     })
 
     const authenticate = (_account)=>{
@@ -26,11 +27,16 @@ function AuthContextProvider(props){
             })
     }
 
+    const updateAuth = (data)=>{
+        setState({...state,...data})
+    }
+
     return(
         <AuthContext.Provider 
             value={{...state,...{
                 authenticate,
-                deauthenticate
+                deauthenticate,
+                updateAuth
             }}}
         >
             {props.children}
