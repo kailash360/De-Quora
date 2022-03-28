@@ -3,16 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import AuthContextProvider from './context/AuthContext'
-import ContractContextProvider from './context/ContractContext'
+// import AuthContextProvider from './context/AuthContext'
+// import ContractContextProvider from './context/ContractContext'
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthContextProvider>
-      <ContractContextProvider>
+    {/* <AuthContextProvider> */}
+      {/* <ContractContextProvider> */}
         <App />
-      </ContractContextProvider>
-    </AuthContextProvider>
+      {/* </ContractContextProvider> */}
+    {/* </AuthContextProvider> */}
   </React.StrictMode>,
   document.getElementById('root')
 );
