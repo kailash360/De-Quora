@@ -11,11 +11,13 @@ function Dashboard() {
 
   const [name, setName] = useState()
 
-  useEffect(async () => {
-    if(!UserServices) return
-
-    const reponse = await UserServices.get_user_details()   
-    setName(reponse.data)
+  useEffect(() => {
+    (async()=>{
+      if(!UserServices) return
+  
+      const reponse = await UserServices.get_user_details()   
+      setName(reponse.data)
+    })();
   },[account, UserServices])
 
   return (<>

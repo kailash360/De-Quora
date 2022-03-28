@@ -1,4 +1,5 @@
 import Connect from './Connect'
 import GetContracts from './GetContracts'
 
-export default { Connect, GetContracts }
+const Utils = { Connect, GetContracts }
+export default Utils

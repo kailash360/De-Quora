@@ -26,3 +26,8 @@ export const createNewUserContract = async(address) => {
     return { success: true, data: { UserContract } }
 
 }
+
+export const createNewQuestionContract = async(address) => {
+    const QuestionContract = new web3.eth.Contract(QUESTION_CONTRACT_BUILD.abi, address)
+    return { success: true, data: { QuestionContract } }
+}

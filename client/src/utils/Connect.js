@@ -1,5 +1,3 @@
-import Constants from '../Constants'
-
 const Connect = async() => {
 
     try {
