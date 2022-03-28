@@ -6,7 +6,7 @@ contract Main {
 
     mapping(address => User) public users;    
 
-    event new_user_added(string, address);
+    event new_user_added(User, address);
     event main_deployed(string);
 
     constructor(){
@@ -22,7 +22,7 @@ contract Main {
         User newUser = new User(_name);
         users[msg.sender] = newUser;
 
-        emit new_user_added(_name, address(newUser));
+        emit new_user_added(newUser, address(newUser));
         
         //Return the user
         return newUser;

@@ -1,6 +1,8 @@
 import React,{useEffect, useState} from 'react'
 import {AuthContext} from '../context/AuthContext'
 import {ContractContext} from '../context/ContractContext'
+import AddQuestion from '../components/AddQuestion'
+import QuestionList from '../components/QuestionList'
 
 function Dashboard() {
 
@@ -19,6 +21,8 @@ function Dashboard() {
   return (<>
     <div>Dashboard</div>
     <p>Name: {name}</p>
+    <AddQuestion/>
+    <QuestionList></QuestionList>
     </>
   )
 }

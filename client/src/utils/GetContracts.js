@@ -5,7 +5,8 @@ const USER_CONTRACT_BUILD = require('../build/User.json')
 const QUESTION_CONTRACT_BUILD = require('../build/Question.json')
 const web3 = new Web3(Constants.RPC_PROVIDER)
 const NETWORK_ID = "5777"
-    // web3.eth.Contract.handleRevert = true
+web3.eth.Contract.handleRevert = true
+web3.eth.handleRevert = true
 
 const GetContracts = () => {
     const CONTRACT_ADDRESS = MAIN_CONTRACT_BUILD.networks[NETWORK_ID].address

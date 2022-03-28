@@ -21,12 +21,15 @@ function RegistrationBox() {
         const registrationResponse = await MainServices.register(name,account)
         console.log(registrationResponse)
 
-        if(!registrationResponse.success) console.log(registrationResponse.message)
+        if(!registrationResponse.success) {
+            console.log(registrationResponse.message)
+            return
+        }
         
         const connectionResult = await Utils.Connect()
         authenticate(connectionResult.data.account)
 
-        updateUserContract(registrationResponse.events[0].address)
+        updateUserContract(registrationResponse.data.events['0'].address)
 
         navigate('/',{replace:true})
     }

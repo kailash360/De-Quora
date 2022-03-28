@@ -15,11 +15,7 @@ function Landing() {
 
     return (
         <div>
-            Landing Page
-            <Button onClick={() => {navigate('/register')}} variant="outlined">
-                Get Started
-            </Button>
-
+            <p>Landing Page</p>
             <RegistrationBox></RegistrationBox>
         </div>
     )

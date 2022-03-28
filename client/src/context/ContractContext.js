@@ -14,7 +14,8 @@ function ContractContextProvider(props){
     const [state, setState] = useState({
         MainContract: null,
         UserContract: null,
-        QuestionContract: null
+        QuestionContract: null,
+        Questions: []
     })
 
     const getUpdatedContracts = () => state
@@ -26,6 +27,11 @@ function ContractContextProvider(props){
     const updateUserContract = async (address)=>{
         const newUserContract = await createNewUserContract(address)
         setState({...state,...{UserContract: newUserContract.data.UserContract}})
+    }
+
+    const updateQuestions = async(_questions)=>{
+        console.log('updateQuestions', _questions)
+        setState({...state, ...{Questions: _questions}})
     }
 
     const MainServices = {
@@ -47,9 +53,11 @@ function ContractContextProvider(props){
         register: async(name, account) => {
             try {
                 if (!state.MainContract) return { success: true, data: ""}
+                console.log(`Registering ${name} on ${account}`)
+                console.log('Main contract: ', state.MainContract)
                 const response =
                     await state.MainContract.methods.register(name).send({
-                        gas: 2000000,
+                        gas: 3000000,
                         from: account
                     })
                 return { success: true, data: response }
@@ -68,6 +76,33 @@ function ContractContextProvider(props){
                 return { success: true, data: response }
             } catch (err) {
                 console.log("Error in fetching user details: \n", err)
+                return { success: false, message: err.message }
+            }
+        },
+        get_questions: async () =>{
+            try{
+                if(!state.UserContract) return { success: true, data: ''}
+                const response = await state.UserContract.methods.get_questions().call()
+                console.log(response)
+                updateQuestions(response)
+                return { success: true, data: response }
+            }catch (err) {
+                console.log("Error in fetching questions of user: \n", err)
+                return { success: false, message: err.message}
+            }
+        },
+        add_question: async(_questionText) => {
+            try{
+                if(!state.UserContract) return { success: true, data: ''}
+                const response = await state.UserContract.methods.add_question(_questionText).send({
+                    from: account,
+                    gas: 3000000
+                })
+                console.log(response)
+                await UserServices.get_questions()
+                return { success: true, data: response}
+            }catch (err) {
+                console.log("Error in adding question: \n", err)
                 return { success: false, message: err.message }
             }
         }
@@ -103,7 +138,8 @@ function ContractContextProvider(props){
                 updateUserContract,
                 getUpdatedContracts,
                 MainServices,
-                UserServices
+                UserServices,
+                updateQuestions
             }        
         }}>
             {props.children}
