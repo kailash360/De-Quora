@@ -46,7 +46,7 @@ function ContractContextProvider(props){
         },
         register: async(name, account) => {
             try {
-                if (!state.MainContract) throw new Error("Main contract is not defined yet")
+                if (!state.MainContract) return { success: true, data: ""}
                 const response =
                     await state.MainContract.methods.register(name).send({
                         gas: 2000000,
@@ -63,7 +63,7 @@ function ContractContextProvider(props){
     const UserServices = {
         get_user_details: async() => {
             try {
-                if (!state.UserContract) throw new Error("UserContract is not defined yet")
+                if (!state.UserContract) return { success: true, data: ''}
                 const response = await state.UserContract.methods.name().call()
                 return { success: true, data: response }
             } catch (err) {
