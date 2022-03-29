@@ -9,7 +9,7 @@ import Utils from '../utils'
 function RegistrationBox() {
     
     // const [MainServices] = useMainServices()
-    const {MainServices, updateUserContract} = React.useContext(ContractContext)
+    const {Services} = React.useContext(ContractContext)
     const {account, authenticate} = React.useContext(AuthContext)
     
     const navigate = useNavigate()
@@ -18,7 +18,7 @@ function RegistrationBox() {
     const handleRegister = async()=>{
         if(!name) return
 
-        const registrationResponse = await MainServices.register(name,account)
+        const registrationResponse = await Services.register(name,account)
         console.log(registrationResponse)
 
         if(!registrationResponse.success) {
@@ -28,8 +28,6 @@ function RegistrationBox() {
         
         const connectionResult = await Utils.Connect()
         authenticate(connectionResult.data.account)
-
-        updateUserContract(registrationResponse.data.events['0'].address)
 
         navigate('/',{replace:true})
     }
