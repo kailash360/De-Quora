@@ -2,8 +2,8 @@ import React,{useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {AuthContext} from '../context/AuthContext'
 import {ContractContext} from '../context/ContractContext'
-import AddQuestion from '../components/AddQuestion'
 import QuestionList from '../components/QuestionList'
+import Button from '@mui/material/Button'
 
 function Dashboard() {
 
@@ -31,8 +31,8 @@ function Dashboard() {
   return (<>
     <div>Dashboard</div>
     <p>Name: {name}</p>
-    <AddQuestion/>
     <QuestionList></QuestionList>
+    <Button variant="outlined" onClick={() => {navigate('/new')}}>+ New Question</Button>
     </>
   )
 }

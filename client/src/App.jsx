@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard'
+import NewQuestion from './pages/NewQuestion'
 import AuthContextProvider from './context/AuthContext'
 import ContractContextProvider from './context/ContractContext'
 
@@ -21,6 +22,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />}/>
             <Route path="/dashboard" element={<Dashboard />}/>      
+            <Route path="/new" element={<NewQuestion />}/> 
           </Routes>
         </BrowserRouter>
       </ContractContextProvider>
