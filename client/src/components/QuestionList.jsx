@@ -3,21 +3,19 @@ import {ContractContext} from '../context/ContractContext'
 
 function QuestionList() {
 
-    const {Questions, UserServices, UserContract, QuestionServices} = React.useContext(ContractContext)
+    const {DeQuora, Services} = React.useContext(ContractContext)
     const [questions, setQuestions] = useState([])
+    
+    const getQuestions = async() =>{
+        if(!Services) return
 
-    useEffect(async () => {
+        const response = await Services.get_all_questions()        
+        setQuestions(response.data.questions)
+    }
 
-        // if(Questions.length && questions.length === Questions.length) return
-
-        console.log('Getting questions')
-        const response = await UserServices.get_questions()
-        console.log(response)
-
-        const allQuestions = await QuestionServices.get_question_list(response.data.questions)
-        console.log(allQuestions.data)
-        setQuestions(allQuestions.data.questions)
-    },[UserContract, Questions])
+    useEffect(() => {
+        getQuestions()
+    },[DeQuora])
 
     console.log("Final questions: " ,questions)
     

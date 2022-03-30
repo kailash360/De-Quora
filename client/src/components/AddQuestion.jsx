@@ -5,11 +5,11 @@ import {ContractContext} from '../context/ContractContext'
 
 function AddQuestion() {
 
-    const {UserServices} = React.useContext(ContractContext)
+    const {Services} = React.useContext(ContractContext)
     const [questionText, setQuestionText] = React.useState('')
 
     const addQuestion = async()=>{
-        const response = await UserServices.add_question(questionText)
+        const response = await Services.add_question(questionText)
         console.log(response)
     }
 

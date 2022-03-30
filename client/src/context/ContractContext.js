@@ -2,7 +2,6 @@ import Web3 from 'web3'
 import {useEffect} from 'react'
 import {createContext, useState, useContext} from 'react'
 import { AuthContext } from './AuthContext'
-import {createNewUserContract, createNewQuestionContract} from '../utils/GetContracts'
 import Utils from '../utils'
 
 export const ContractContext = createContext()
@@ -65,6 +64,48 @@ function ContractContextProvider(props){
                 console.log("Error in fetching user details: \n", err)
                 return { success: false, message: err.message }
             }
+        },
+        add_question: async(_question) => {
+            try{
+                const response = await state.DeQuora.methods.add_question(_question).send({
+                    gas: 3000000,
+                    from: account
+                })
+
+                return { success: true, data: response }
+
+            }catch (err) {
+                console.log("Error in creating question: \n", err)
+                return { success: false, message: err.message}
+            }
+        },
+        get_all_questions: async()=>{
+            try{
+                if(!state.DeQuora) return { success:true, data:{}}
+                const allQuestions = await state.DeQuora.methods.get_all_questions().call()
+                return { success: true, data:{questions: allQuestions} }
+            }catch (err) {
+                console.log("Error in getting all questions: \n", err)
+                return { success: false, message: err.message }
+            }
+        },
+        get_questions: async() => {
+            try{
+                if(!state.DeQuora) return {success: true, data:{}}
+                const totalQuestions = await state.DeQuora.methods.total_questions().call()
+                console.log('Response of getting total questions: ',totalQuestions)
+
+                let questions = [];
+                for(let i = 0; i < totalQuestions; i++){
+                    const questionResponse = await state.DeQuora.methods.questions(i).call()
+                    console.log(`Question ${i}: `, questionResponse)
+                    questions.push(questionResponse)
+                }
+                return { success:true, data: {questions}}
+            }catch (err) {
+                console.log("Error in getting questions: \n", err)
+                return { success: false, message: err.message }
+            }
         }
     }
 
@@ -85,7 +126,7 @@ function ContractContextProvider(props){
         const userResponse = await Services.get_user(account)
         if(userResponse.success){
             authenticate(account)
-        }     
+        }
         
     }, [account])
 
