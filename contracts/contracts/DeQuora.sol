@@ -9,23 +9,28 @@ contract DeQuora {
         string name;
         uint[] questions;
         uint[] answers;
+        uint256 joined_on;
     }
 
     struct Question{
         uint id;
         string question;
-        address author;
+        string author_name;
+        address author_address;
         uint total_answers;
         uint likes;
         address[] liked_by;
+        uint256 created_on;
     }
 
     struct Answer{
         uint id;
         string answer;
-        address author;
+        string author_name;
+        address author_address;
         uint256 likes;
         address[] liked_by;
+        uint256 created_on;
     }
 
 
@@ -53,7 +58,7 @@ contract DeQuora {
 
         //Create a new user
         uint[] memory arr;
-        User memory newUser = User(total_users, msg.sender, _name, arr, arr);
+        User memory newUser = User(total_users, msg.sender, _name, arr, arr, block.timestamp);
         users[msg.sender] = newUser;
         total_users++;
         emit new_user_added(newUser);
@@ -71,7 +76,7 @@ contract DeQuora {
         require(bytes(_question).length != 0,"Question cannot be empty");
         
         //Create the question
-        Question memory newQuestion = Question(total_questions, _question, msg.sender, 0, 0, new address[](0));
+        Question memory newQuestion = Question(total_questions, _question, users[msg.sender].name ,msg.sender, 0, 0, new address[](0), block.timestamp);
         questions.push(newQuestion);
         total_questions++;
 
@@ -87,7 +92,7 @@ contract DeQuora {
         return questions;
     }
 
-    function get_question(uint _question_id) public view returns(Question memory){
+    function get_question(uint _question_id) public view returns(Question memory, Answer[] memory, User memory){
 
         Question memory question;
 
@@ -100,7 +105,9 @@ contract DeQuora {
                 break;
             }
         }
-        return question;
+        User memory _author = users[question.author_address];
+        Answer[] memory _answers = answers[question.id];
+        return (question, _answers, _author);
     }
 
     function set_question(Question memory _question, uint _question_id) public {
@@ -118,21 +125,21 @@ contract DeQuora {
         }
     }
 
-    function add_answer(uint _question_id,string memory _answer) public returns(Answer memory){
+    function add_answer(uint _question_id,string memory _answer) public payable returns(Answer memory){
 
         require(bytes(_answer).length != 0,"Answer cannot be empty");
 
         //Get the question from all the questions
-        Question memory question= get_question(_question_id);
+        (Question memory question,,) = get_question(_question_id);
 
-        require(question.author != msg.sender,"Author cannot answer his/her own question");
+        require(question.author_address != msg.sender,"Author cannot answer his/her own question");
 
         //Create the answer
         address[] memory arr;
-        Answer memory answer = Answer(question.total_answers, _answer, msg.sender,0,arr);
+        Answer memory answer = Answer(question.total_answers, _answer, users[msg.sender].name, msg.sender,0,arr, block.timestamp);
 
         //Add the answer to records
-        answers[_question_id][question.total_answers] = answer;
+        answers[_question_id].push(answer);
         question.total_answers++;
 
         //update the question in the array
@@ -143,7 +150,7 @@ contract DeQuora {
     function get_answer(uint _question_id, uint _answer_id) public view returns(Answer memory){
 
         //Get the question
-        Question memory question = get_question(_question_id);
+        (Question memory question,,)= get_question(_question_id);
 
         Answer memory answer;
 
@@ -159,7 +166,7 @@ contract DeQuora {
     function set_answer(uint _question_id, uint _answer_id, Answer memory _answer) public returns(Question memory){
 
         //Get the question
-        Question memory question = get_question(_question_id);
+        (Question memory question,,)= get_question(_question_id);
 
         for(uint i=0; i<question.total_answers; i++){
             if(answers[_question_id][i].id == _answer_id){
@@ -174,7 +181,7 @@ contract DeQuora {
     function like_answer( uint _question_id, uint _answer_id, address _user_address) public returns(Answer memory){
 
         //Get the question
-        Question memory question = get_question(_question_id);
+        (Question memory question,,)= get_question(_question_id);
 
         // Get the answeer form the mapping
         Answer memory answer = get_answer(_question_id, _answer_id);
