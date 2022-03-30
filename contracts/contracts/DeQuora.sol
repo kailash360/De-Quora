@@ -29,11 +29,12 @@ contract DeQuora {
     }
 
 
-    uint total_users;
-    uint total_questions;
+    uint public total_users;
+    uint public total_questions;
     mapping(address => User) public users;    
-    mapping(uint => Question) public questions; // struct address to question
-    mapping(uint => mapping (uint=>Answer)) answers; // question address to mapping to answers
+    mapping(uint => Answer[]) public answers; //question id to answers
+    Question[] public questions; // user address to question
+    Answer[] answers_array;
 
     event new_user_added(User);
     event main_deployed(string);
@@ -70,10 +71,11 @@ contract DeQuora {
         require(bytes(_question).length != 0,"Question cannot be empty");
         
         //Create the question
-        address[] memory arr;
-        Question memory newQuestion = Question(total_questions, _question, msg.sender, 0, 0, arr);
-        questions[total_questions] = newQuestion;
+        Question memory newQuestion = Question(total_questions, _question, msg.sender, 0, 0, new address[](0));
+        questions.push(newQuestion);
         total_questions++;
+
+        answers[newQuestion.id] = answers_array;
 
         emit question_added(newQuestion);
 
@@ -81,11 +83,48 @@ contract DeQuora {
         return newQuestion;
     }
 
+    function get_all_questions() public view returns(Question[] memory){
+        return questions;
+    }
+
+    function get_question(uint _question_id) public view returns(Question memory){
+
+        Question memory question;
+
+        //iterate over all the questions
+        for(uint i=0; i<total_questions; i++){
+            // check for the question with the given id
+            if(questions[i].id == _question_id){
+                //return the question with the given id, and corresponding author    
+                question = questions[i];
+                break;
+            }
+        }
+        return question;
+    }
+
+    function set_question(Question memory _question, uint _question_id) public {
+        
+        //iterate over all the questions
+        for(uint i=0; i<total_questions; i++){
+
+            // check for the question to be updated usign the id
+            if(questions[i].id == _question_id){
+
+                //update the question when found
+                questions[i] = _question;
+                break;
+            }
+        }
+    }
+
     function add_answer(uint _question_id,string memory _answer) public returns(Answer memory){
 
         require(bytes(_answer).length != 0,"Answer cannot be empty");
 
-        Question memory question = questions[_question_id];
+        //Get the question from all the questions
+        Question memory question= get_question(_question_id);
+
         require(question.author != msg.sender,"Author cannot answer his/her own question");
 
         //Create the answer
@@ -96,30 +135,49 @@ contract DeQuora {
         answers[_question_id][question.total_answers] = answer;
         question.total_answers++;
 
-        questions[_question_id] = question;
+        //update the question in the array
+        set_question(question, _question_id);
+        return answer;
+    }        
+
+    function get_answer(uint _question_id, uint _answer_id) public view returns(Answer memory){
+
+        //Get the question
+        Question memory question = get_question(_question_id);
+
+        Answer memory answer;
+
+        for(uint i=0; i<question.total_answers; i++){
+            if(answers[_question_id][i].id == _answer_id){
+                answer = answers[_question_id][i];
+            }
+        }
+
         return answer;
     }
 
-    function get_answers(uint _question_id) public view returns(Answer[] memory){
-        
-        Question memory question = questions[_question_id];
-
-        Answer[] memory _answers;
-        for(uint i=0;i<question.total_answers;i++){
-            _answers[i] = answers[_question_id][i];
-        }
-
-        return _answers;
-    }
-        
-        
-    function like_answer( uint _question_id, uint _answer_number, address _user_address) public returns(Answer memory){
+    function set_answer(uint _question_id, uint _answer_id, Answer memory _answer) public returns(Question memory){
 
         //Get the question
-        Question memory question = questions[_question_id];
+        Question memory question = get_question(_question_id);
+
+        for(uint i=0; i<question.total_answers; i++){
+            if(answers[_question_id][i].id == _answer_id){
+                answers[_question_id][i] = _answer;
+                break;
+            }
+        }
+
+        return question;
+    }
+        
+    function like_answer( uint _question_id, uint _answer_id, address _user_address) public returns(Answer memory){
+
+        //Get the question
+        Question memory question = get_question(_question_id);
 
         // Get the answeer form the mapping
-        Answer memory answer = answers[_question_id][_answer_number];
+        Answer memory answer = get_answer(_question_id, _answer_id);
         
         for(uint i=0; i<answer.liked_by.length; i++){
             require(answer.liked_by[i] != _user_address, "You have already liked this answer") ;
@@ -130,10 +188,10 @@ contract DeQuora {
         answer.likes++;
 
         //Update the answer
-        answers[_question_id][_answer_number] = answer;
+        question = set_answer(_question_id, _answer_id ,answer);
 
         //update the question
-        questions[_question_id] = question;
+        set_question(question, _question_id);
 
         //Return the updated likes
         return answer;
