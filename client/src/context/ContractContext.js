@@ -106,6 +106,33 @@ function ContractContextProvider(props){
                 console.log("Error in getting questions: \n", err)
                 return { success: false, message: err.message }
             }
+        },
+        get_question: async(_question_id) => {
+            try{
+                if(!state.DeQuora) return { success:true, data: {}}
+                const response = await state.DeQuora.methods.get_question(_question_id).call();
+                console.log(`Response of getting question of id ${_question_id}: `, response)
+                return { success: true, data: {question: response[0], answers: response[1]} }
+
+            }catch (err) {
+                console.log(`Error in getting question of id ${_question_id}: \n`, err)
+                return { success: false, message: err.message }
+            }
+        },
+        add_answer: async(_question_id, _answer) =>{
+            try{
+                if(!state.DeQuora) return { success:true, data:{}}
+                console.log(`Adding answer ${_answer} for question ${_question_id}`)
+                const addAnswerResponse = await state.DeQuora.methods.add_answer(_question_id, _answer).send({
+                    from: account,
+                    gas: 3000000
+                })
+                console.log(addAnswerResponse)
+                return { success: true, data:{answers: addAnswerResponse}}
+            }catch(err){
+                console.log('Error in adding answer: ', err)
+                return { success: false, message: err.message }
+            }
         }
     }
 
@@ -126,6 +153,8 @@ function ContractContextProvider(props){
         const userResponse = await Services.get_user(account)
         if(userResponse.success){
             authenticate(account)
+        }else{
+            if(window.location.pathname !== "/") window.location.href = "/"
         }
         
     }, [account])

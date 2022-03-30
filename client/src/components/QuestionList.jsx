@@ -22,7 +22,7 @@ function QuestionList() {
     return (<>
         <div>QuestionList</div>
         {(questions && questions.length)?
-            questions.map((question, index) => <p key={index}>{index+1}. {question.question} by {question.author}</p> ): 
+            questions.map((question, index) => <><p key={index}>{index+1}. {question.question} by {question.author_name}  {Date(question.created_on)}  <a href={`/question/${index}`}>View</a></p> </> ): 
             <p>No questions yet</p> 
         }
         </>

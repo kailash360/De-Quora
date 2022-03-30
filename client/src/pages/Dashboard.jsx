@@ -12,28 +12,30 @@ function Dashboard() {
   const navigate = useNavigate()
 
   const [name, setName] = useState()
+  const [loading, setLoading] = useState(false)
+  
+  const getDetails = async()=>{
+    if(!Services || !account) return
 
-  
+    const response = await Services.get_user_details(account)   
+    console.log(response)
+    setName(response.data.name)
+  }
+
   useEffect(() => {
-    (async()=>{
-      if(!Services || !account) return
-  
-      const response = await Services.get_user_details(account)   
-      console.log(response)
-      setName(response.data.name)
-    })();
+    setLoading(true)
+    getDetails();
+    setLoading(false)
   },[account, Services])
 
-  useEffect(() => {
-    if(account && !authenticated) navigate('/',{replace:true})
-  },[account, authenticated])
-
-  return (<>
+  return (
+    loading? <p>Loading...</p>:
+  <>
     <div>Dashboard</div>
     <p>Name: {name}</p>
-    <QuestionList></QuestionList>
     <Button variant="outlined" onClick={() => {navigate('/new')}}>+ New Question</Button>
-    </>
+    <QuestionList></QuestionList>
+  </>
   )
 }
 
