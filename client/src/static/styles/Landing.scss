@@ -1,0 +1,34 @@
+@import 'variables';
+.landing {
+    height: 100vh;
+    padding: 0px !important;
+    &-left {
+        background-color: $background-primary;
+        height: 100vh;
+        padding: 50px;
+        &-heading {
+            margin-top: 1.8em !important;
+            font-weight: bold !important;
+            color: $text-color-primary;
+        }
+        &-subheading {
+            margin-top: 0.5em !important;
+            color: $text-color-secondary;
+        }
+        &-registration-box {
+            margin-top: 1em !important;
+            padding: 0px !important;
+            &>.input,
+            &>.input>div>input {
+                color: $text-color-secondary;
+                font-weight: semi-bold;
+                font-size: 1.3em;
+            }
+            &>.button {
+                margin-top: 0.5em !important;
+                font-size: 1.2em;
+                font-weight: bold
+            }
+        }
+    }
+}

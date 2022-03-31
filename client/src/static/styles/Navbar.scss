@@ -1,0 +1,10 @@
+@import 'variables';
+.navbar {
+    background-color: $background-primary;
+    width: 100%;
+    &-heading {
+        color: $text-color-primary;
+        font-weight: bold;
+        font-size: 2em;
+    }
+}

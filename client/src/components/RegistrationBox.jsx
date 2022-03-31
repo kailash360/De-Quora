@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import {AuthContext} from '../context/AuthContext';
 import {ContractContext} from '../context/ContractContext';
 import Utils from '../utils'
+import Container from '@mui/material/Container'
 
 function RegistrationBox() {
     
@@ -32,10 +33,11 @@ function RegistrationBox() {
         navigate('/',{replace:true})
     }
 
-    return (<>
-        <TextField id="standard-basic" label="Name" variant="standard" value={name} onChange={(e)=>{setName(e.target.value)}} />
-        <Button variant="contained" onClick={handleRegister}>Register</Button>
-        </>
+    return (
+        <Container maxWidth={false} className="landing-left-registration-box">
+            <TextField id="outlined-basic" fullWidth placeholder="Enter your name here" variant="outlined" className="input" value={name} onChange={(e)=>{setName(e.target.value)}} />
+            <Button variant="contained" className="button" onClick={handleRegister}>Get Started</Button>
+        </Container>        
     )
 }
 

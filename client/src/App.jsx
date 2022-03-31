@@ -11,14 +11,16 @@ import NewQuestion from './pages/NewQuestion'
 import Question from './pages/Question'
 import AuthContextProvider from './context/AuthContext'
 import ContractContextProvider from './context/ContractContext'
+import ThemeContextProvider from './context/ThemeContext'
+import './static/styles/index.scss'
 
 function App() {
 
   return (
-  <>
+  <ThemeContextProvider>
     <AuthContextProvider>
       <ContractContextProvider>
-        <Navbar></Navbar>
+        {window.location.pathname !== "/" && <Navbar></Navbar>}
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />}/>
@@ -29,7 +31,7 @@ function App() {
         </BrowserRouter>
       </ContractContextProvider>
     </AuthContextProvider>
-  </>
+  </ThemeContextProvider>
   );
 }
 
