@@ -2,6 +2,7 @@ import React, {useContext, useState, useEffect} from 'react'
 import {ContractContext} from '../context/ContractContext'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import {Container} from '@mui/material'
 
 function AddAnswer({questionId}) {
 
@@ -15,11 +16,19 @@ function AddAnswer({questionId}) {
     }
 
     return (
-        <div>
-            <TextField label="Answer the question here" margin="normal"  onChange={(e)=>{setAnswer(e.target.value)}} value={answer} />
-            <br />
-            <Button variant="outlined" onClick={addAnswer}>Answer</Button>
-        </div>
+        <Container maxWidth={false} className='question-answer-input'>
+            <TextField 
+                fullWidth
+                label="Answer the question here"
+                margin="normal"
+                multiline
+                minRows={5}
+                value={answer}
+                onChange={(e)=>{setAnswer(e.target.value)}}
+                fontSize='large'
+            />
+            <Button variant="contained" onClick={addAnswer}>Answer</Button>
+        </Container>
     )
 }
 

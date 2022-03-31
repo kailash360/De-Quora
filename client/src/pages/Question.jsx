@@ -1,9 +1,11 @@
 import React, {useState, useContext, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
+import {Container} from '@mui/material'
 import {ContractContext} from '../context/ContractContext'
 import QuestionBox from '../components/QuestionBox'
 import AnswerList from '../components/AnswerList'
 import AddAnswer from '../components/AddAnswer'
+import '../static/styles/QuestionPage.scss'
 
 function Question() {
 
@@ -26,11 +28,11 @@ function Question() {
     },[DeQuora])
 
     return (question?
-        <div>
+        <Container maxWidth='lg'>
             <QuestionBox question={question}></QuestionBox>
             <AddAnswer questionId={params.questionId}></AddAnswer>
             <AnswerList answers={answers}></AnswerList>
-        </div>
+        </Container>
         : <p>Loading...</p>
     )
 }
