@@ -8,5 +8,11 @@
         font-weight: bolder;
         font-size: 2em;
         cursor: pointer;
+        width: fit-content;
+    }
+    &-menu {
+        &-button {
+            border-radius: 50%;
+        }
     }
 }
