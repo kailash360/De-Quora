@@ -6,7 +6,7 @@ import Link from '@mui/material/Link';
 
 function Navbar(){
 
-    return(
+    return(window.location.pathname != "/" &&
         <Container className="navbar" fullWidth maxWidth={false}>
             <Link href="/dashboard" color="white" underline="none"><Typography variant="h4" className="navbar-heading">De-Quora</Typography></Link>
         </Container>

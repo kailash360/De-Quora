@@ -1,0 +1,13 @@
+@import 'variables';
+.footer {
+    background-color: $background-primary;
+    padding: 10px;
+    text-align: center;
+    margin-top: 2em;
+    &-content {
+        color: $text-color-secondary;
+        &>.name {
+            color: $text-color-primary;
+        }
+    }
+}
