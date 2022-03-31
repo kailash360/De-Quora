@@ -1,3 +1,4 @@
+import {useState, useEffect} from 'react'
 import './App.css';
 import Navbar from './components/Navbar'
 import {
@@ -20,7 +21,7 @@ function App() {
   <ThemeContextProvider>
     <AuthContextProvider>
       <ContractContextProvider>
-        {window.location.pathname !== "/" && <Navbar></Navbar>}
+        {<Navbar></Navbar>}
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />}/>

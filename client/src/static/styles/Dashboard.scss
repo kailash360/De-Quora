@@ -1,0 +1,15 @@
+@import 'variables';
+.dashboard {
+    &-top {
+        margin-top: 0px;
+        &-text {
+            margin-top: 0.8em !important;
+        }
+    }
+    &-mid {
+        margin-top: 2em;
+        &-link {
+            color: $text-color-secondary;
+        }
+    }
+}
