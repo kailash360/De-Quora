@@ -11,6 +11,7 @@ import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard'
 import NewQuestion from './pages/NewQuestion'
 import Question from './pages/Question'
+import Profile from './pages/Profile'
 import AuthContextProvider from './context/AuthContext'
 import ContractContextProvider from './context/ContractContext'
 import ThemeContextProvider from './context/ThemeContext'
@@ -40,6 +41,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />}/>      
               <Route path="/new" element={<NewQuestion />}/> 
               <Route path="/question/:questionId" element={<Question />}/> 
+              <Route path="/profile/:account" element={<Profile />}/> 
             </Route> 
           </Routes>
         </BrowserRouter>

@@ -1,0 +1,15 @@
+@import 'variables';
+.profile {
+    padding: 0px !important;
+    &-details {
+        background-color: $background-secondary;
+        padding: 1em !important;
+        &-image {
+            border-radius: 50%;
+            border: 1px solid white;
+        }
+        &-info {
+            color: white !important;
+        }
+    }
+}
