@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import {ContractContext} from '../context/ContractContext'
-import {Grid, Container, IconButton, Typography, Box} from '@mui/material'
+import {Grid, Container, IconButton, Typography, Link} from '@mui/material'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ForumIcon from '@mui/icons-material/Forum';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ShareIcon from '@mui/icons-material/Share';
 import '../static/styles/Questions.scss'
 import Utils from '../utils'
+import Avatar from '@mui/material/Avatar';
 
 function Question({question}){
 
@@ -14,10 +15,19 @@ function Question({question}){
         <Container className='question' maxWidth='lg'>
             <Grid container direction = 'coloumn'>
                 <Grid item lg={12} className='question-text'>
-                    <Typography variant='h5' fontWeight='semi-bold'>{question.question}</Typography>
+                    <Link href={`/question/${question.id}`} color='black' underline='none'>
+                        <Typography variant='h5' fontWeight='semi-bold'>{question.question}</Typography>
+                    </Link>
                 </Grid>
-                <Grid item lg={12} className='question-author'>
-                    <Typography variant='p' fontSize='large'>{question.author_name}</Typography>
+                <Grid item lg={12} className='question-author' direction='row'>
+                    <Avatar 
+                        src={`https://robohash.org/${question.author_address}`}
+                        sx={{ width: 24, height: 24 }}
+                        className='avatar'
+                    ></Avatar>
+                    <Link href={`/profile/${question.author_address}`} underline='none'>
+                        <Typography variant='p' fontSize='large' className='name'>{question.author_name}</Typography>
+                    </Link>
                 </Grid>
                 <Grid item container lg={12} justifyContent='space-between' className='question-information'>
                     <Grid item lg={11} className='left'>
