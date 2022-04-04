@@ -8,6 +8,7 @@ contract DeQuora {
         address account;
         string name;
         uint[] questions;
+        uint[] answered_questions;
         uint[] answers;
         uint256 joined_on;
     }
@@ -25,6 +26,7 @@ contract DeQuora {
 
     struct Answer{
         uint id;
+        uint question_id;
         string answer;
         string author_name;
         address author_address;
@@ -33,6 +35,10 @@ contract DeQuora {
         uint256 created_on;
     }
 
+    struct QuestionAnswer{
+        Question question;
+        Answer[] answers;
+    }
 
     uint public total_users;
     uint public total_questions;
@@ -40,6 +46,7 @@ contract DeQuora {
     mapping(uint => Answer[]) public answers; //question id to answers
     Question[] public questions; // user address to question
     Answer[] answers_array;
+    uint[] arr;
 
     event new_user_added(User);
     event main_deployed(string);
@@ -57,8 +64,7 @@ contract DeQuora {
         require(bytes(_name).length != 0,"Name cannot be empty");
 
         //Create a new user
-        uint[] memory arr;
-        User memory newUser = User(total_users, msg.sender, _name, arr, arr, block.timestamp);
+        User memory newUser = User(total_users, msg.sender, _name, arr, arr, arr, block.timestamp);
         users[msg.sender] = newUser;
         total_users++;
         emit new_user_added(newUser);
@@ -69,7 +75,7 @@ contract DeQuora {
 
     function get_user_details(address _user_address) public view returns(User memory){
         User memory user = users[_user_address];
-        return user;
+        return user;       
     }
 
     function add_question(string memory _question) public payable returns(Question memory){
@@ -81,6 +87,7 @@ contract DeQuora {
         total_questions++;
 
         answers[newQuestion.id] = answers_array;
+        users[msg.sender].questions.push(newQuestion.id);
 
         emit question_added(newQuestion);
 
@@ -135,12 +142,16 @@ contract DeQuora {
         require(question.author_address != msg.sender,"Author cannot answer his/her own question");
 
         //Create the answer
-        address[] memory arr;
-        Answer memory answer = Answer(question.total_answers, _answer, users[msg.sender].name, msg.sender,0,arr, block.timestamp);
+        address[] memory address_arr;
+        Answer memory answer = Answer(question.total_answers, _question_id, _answer, users[msg.sender].name, msg.sender,0,address_arr, block.timestamp);
 
         //Add the answer to records
         answers[_question_id].push(answer);
         question.total_answers++;
+
+        //add the answer to user details
+        users[msg.sender].answered_questions.push(_question_id);
+        users[msg.sender].answers.push(answer.id);
 
         //update the question in the array
         set_question(question, _question_id);
