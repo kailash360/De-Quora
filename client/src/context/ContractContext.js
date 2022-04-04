@@ -58,8 +58,13 @@ function ContractContextProvider(props){
         get_user_details: async(userAddress) => {
             try {
                 console.log('Getting user for address:', userAddress)
-                const response = await state.DeQuora.methods.users(userAddress).call()
-                return { success: true, data: response }
+                const userResponse = await state.DeQuora.methods.get_user_details(userAddress).call()
+                const questionResponse = await state.DeQuora.methods.get_all_questions().call()
+                const data = {
+                    user: userResponse,
+                    questions: questionResponse.filter(question => question.author_address == userAddress),
+                }
+                return { success: true, data }
             } catch (err) {
                 console.log("Error in fetching user details: \n", err)
                 return { success: false, message: err.message }

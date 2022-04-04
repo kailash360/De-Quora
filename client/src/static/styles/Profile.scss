@@ -1,6 +1,7 @@
 @import 'variables';
 .profile {
     padding: 0px !important;
+    min-height: 100vh;
     &-details {
         background-color: $background-secondary;
         padding: 1em !important;

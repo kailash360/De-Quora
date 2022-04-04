@@ -10,10 +10,15 @@ import Avatar from '@mui/material/Avatar';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { AuthContext } from '../context/AuthContext'
 import Grid from '@mui/material/Grid'
+import {Link as RouterLink} from 'react-router-dom'
 
 function Navbar() {
 
   const { account } = React.useContext(AuthContext)
+
+  const hanldeProfileClick = ()=>{
+
+  }
 
   return (window.location.pathname != "/" &&
     <Container className="navbar" fullWidth maxWidth={false}>
@@ -31,7 +36,7 @@ function Navbar() {
                   <Avatar src={`https://wwww.robohash.org/${account}`}></Avatar>
                 </IconButton>
                 <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={popupState.close}>Profile</MenuItem>
+                  <MenuItem> <Link href={`/profile/${account}`} underline='none' color='black'>Profile</Link> </MenuItem>
                 </Menu>
               </React.Fragment>
             )}

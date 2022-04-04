@@ -21,8 +21,7 @@ function Dashboard() {
     if(!Services || !account) return
 
     const response = await Services.get_user_details(account)   
-    console.log(response)
-    setName(response.data.name)
+    setName(response.data.user.name)
   }
 
   useEffect(() => {
@@ -34,7 +33,7 @@ function Dashboard() {
   return (
     loading? <p>Loading...</p>:
   <>
-    <Container maxWidth={false}>
+    <Container maxWidth={false} className='dashboard'>
       <Grid container spacing={8} className="dashboard-top" justifyContent="center">
         <Grid item lg={7} sm={12}>
           <Typography variant="h3" className="dashboard-top-text">Welcome <strong>{name}</strong> </Typography>

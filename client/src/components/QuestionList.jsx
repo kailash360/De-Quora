@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {ContractContext} from '../context/ContractContext'
-import {Grid, Container, IconButton, Typography, Link} from '@mui/material'
+import {Grid, Container, IconButton, Typography, Link, Button} from '@mui/material'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ForumIcon from '@mui/icons-material/Forum';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -8,8 +8,9 @@ import ShareIcon from '@mui/icons-material/Share';
 import '../static/styles/Questions.scss'
 import Utils from '../utils'
 import Avatar from '@mui/material/Avatar';
+import Loader from '../components/Loader'
 
-function Question({question}){
+export const Question = ({question}) =>{
 
     return(
         <Container className='question' maxWidth='lg'>
@@ -31,7 +32,7 @@ function Question({question}){
                 </Grid>
                 <Grid item container lg={12} justifyContent='space-between' className='question-information'>
                     <Grid item lg={11} className='left'>
-                        <span><ThumbUpIcon/> {question.likes} &nbsp;</span>
+                        <span> <Button startIcon={<ThumbUpIcon/>} variant='text'>{question.likes}</Button>&nbsp;</span>
                         <span><ForumIcon/> {question.total_answers} &nbsp;</span>
                         <span><CalendarMonthIcon/> {Utils.DateConvertor(question.created_on)}</span>
                     </Grid>
@@ -44,10 +45,12 @@ function Question({question}){
     )
 }
 
+
 function QuestionList() {
 
     const {DeQuora, Services} = React.useContext(ContractContext)
     const [questions, setQuestions] = useState([])
+    const [loading, setLoading] = useState(false)
     
     const getQuestions = async() =>{
         if(!Services) return
@@ -57,15 +60,19 @@ function QuestionList() {
     }
 
     useEffect(() => {
+        setLoading(true)
         getQuestions()
+        setLoading(false)
     },[DeQuora])
-
-    console.log("Final questions: " ,questions)
     
     return (<>
-        {(questions && questions.length)?
-            questions.map((question, index) => <Question question={question} key={index}/> ): 
-            <p>No questions yet</p> 
+        {!loading?
+            questions && questions.length?
+            questions.map((question, index) => <Question question={question} key={index}/> )
+            : <Container className='no-questions'>
+                Looks like there are no questions yet
+            </Container>        
+        : <Loader></Loader> 
         }
         </>
     )

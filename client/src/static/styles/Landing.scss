@@ -31,4 +31,9 @@
             }
         }
     }
+    &-right {
+        &>svg {
+            margin-top: 200px;
+        }
+    }
 }
